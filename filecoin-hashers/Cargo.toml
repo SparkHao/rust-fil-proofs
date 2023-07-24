@@ -9,7 +9,7 @@ repository = "https://github.com/filecoin-project/rust-fil-proofs"
 readme = "README.md"
 
 [dependencies]
-bellperson = { path = "../../bellman" }
+bellperson = "0.25.0"
 blstrs = "0.7.0"
 generic-array = "0.14.4"
 merkletree = "0.23.0"
