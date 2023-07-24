@@ -5,7 +5,7 @@ use bellperson::{
         aggregate::{
             aggregate_proofs, verify_aggregate_proof, AggregateProof, ProverSRS, VerifierSRS,
         },
-        create_random_proof_batch, create_random_proof_batch_in_priority, verify_proofs_batch,
+        create_random_proof_batch, create_random_proof_batch_in_priority, verify_proofs_batch, create_random_proof_batch_priority_with_verify,
         PreparedVerifyingKey,
     },
     Circuit,
@@ -242,7 +242,7 @@ where
             "cannot create a circuit proof over missing vanilla proofs"
         );
 
-        let circuits = vanilla_proofs
+        let circuits = vanilla_proofs.clone()
             .into_par_iter()
             .enumerate()
             .map(|(k, vanilla_proof)| {
@@ -259,7 +259,29 @@ where
         let groth_proofs = if priority {
             create_random_proof_batch_in_priority(circuits, groth_params, &mut rng)?
         } else {
-            create_random_proof_batch(circuits, groth_params, &mut rng)?
+            // create_random_proof_batch(circuits, groth_params, &mut rng)?
+            let inputs: Vec<_> = (0..vanilla_proofs.len())
+                .into_par_iter()
+                .map(|k| Self::generate_public_inputs(pub_in, pub_params, Some(k)))
+                .collect::<Result<_>>()?;
+
+
+            let circuits_retry = vanilla_proofs
+                .par_iter()
+                .enumerate()
+                .map(|(k, vanilla_proof)| {
+                    Self::circuit(
+                        &pub_in,
+                        C::ComponentPrivateInputs::default(),
+                        &vanilla_proof,
+                        &pub_params,
+                        Some(k),
+                    )
+                })
+                .collect::<Result<Vec<_>>>()?;
+
+            create_random_proof_batch_priority_with_verify(circuits, circuits_retry, groth_params,
+                                                           &mut rng, priority, &inputs, &groth_params.pvk)?
         };
 
         groth_proofs
