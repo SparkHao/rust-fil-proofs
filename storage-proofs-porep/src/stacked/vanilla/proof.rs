@@ -621,6 +621,7 @@ impl<'a, Tree: 'static + MerkleTreeTrait, G: 'static + Hasher> StackedDrg<'a, Tr
                 });
                 s.execute(move || {
                     let _gpu_lock = GPU_LOCK.lock().expect("failed to get gpu lock");
+                    info!("_gpu_lock: {:?}", _gpu_lock);
                     let tree_batcher = match Batcher::pick_gpu(max_gpu_tree_batch_size) {
                         Ok(b) => Some(b),
                         Err(err) => {
@@ -1105,6 +1106,7 @@ impl<'a, Tree: 'static + MerkleTreeTrait, G: 'static + Hasher> StackedDrg<'a, Tr
             });
             s.execute(move || {
                 let _gpu_lock = GPU_LOCK.lock().expect("failed to get gpu lock");
+                info!("_gpu_lock: {:?}", _gpu_lock);
                 let batcher = match Batcher::pick_gpu(max_gpu_tree_batch_size) {
                     Ok(b) => Some(b),
                     Err(err) => {
@@ -1568,6 +1570,7 @@ impl<'a, Tree: 'static + MerkleTreeTrait, G: 'static + Hasher> StackedDrg<'a, Tr
             let max_gpu_tree_batch_size = SETTINGS.max_gpu_tree_batch_size as usize;
 
             let _gpu_lock = GPU_LOCK.lock().expect("failed to get gpu lock");
+            info!("_gpu_lock: {:?}", _gpu_lock);
             let batcher = match Batcher::pick_gpu(max_gpu_tree_batch_size) {
                 Ok(b) => Some(b),
                 Err(err) => {
