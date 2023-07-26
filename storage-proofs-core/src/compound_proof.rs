@@ -256,6 +256,7 @@ where
             })
             .collect::<Result<Vec<_>>>()?;
 
+        info!("priority: {}", priority);
         let groth_proofs = if priority {
             create_random_proof_batch_in_priority(circuits, groth_params, &mut rng)?
         } else {

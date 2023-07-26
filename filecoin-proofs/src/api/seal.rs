@@ -524,7 +524,7 @@ pub fn seal_commit_phase2<Tree: 'static + MerkleTreeTrait>(
         _,
     >>::setup(&compound_setup_params)?;
 
-    trace!("snark_proof:start");
+    info!("snark_proof:start");
     let groth_proofs = StackedCompound::<Tree, DefaultPieceHasher>::circuit_proofs(
         &public_inputs,
         vanilla_proofs,
@@ -532,7 +532,7 @@ pub fn seal_commit_phase2<Tree: 'static + MerkleTreeTrait>(
         &groth_params,
         compound_public_params.priority,
     )?;
-    trace!("snark_proof:finish");
+    info!("snark_proof:finish");
 
     let proof = MultiProof::new(groth_proofs, &groth_params.pvk);
 
