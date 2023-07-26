@@ -11,7 +11,7 @@ pub mod parameters;
 pub mod pieces;
 pub mod types;
 
-mod api;
+pub mod api;
 mod commitment_reader;
 
 pub use api::*;

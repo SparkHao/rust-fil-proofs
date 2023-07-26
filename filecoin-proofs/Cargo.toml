@@ -36,6 +36,9 @@ once_cell = "1.8.0"
 blstrs = "0.7.0"
 ff = { version = "0.13.0", default-features = false }
 iowrap = "0.2.1"
+crossbeam = "0.8.2"
+mapr = "0.8.0"
+chrono = "0.4.26"
 
 [dev-dependencies]
 criterion = "0.3"
